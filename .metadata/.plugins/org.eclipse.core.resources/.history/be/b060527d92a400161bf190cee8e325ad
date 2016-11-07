@@ -51,11 +51,10 @@ public class ArraysLab3 {
 		assert (arr.length >= 2);
 		// creates an array with 1 less length than arr
 		int[] removeIdx = new int[arr.length - 1];
-		// copies arr from index 0 to idx
+		//
 		for (int i = 0; i < idx; i++){
 			removeIdx[i] = arr[i];
 		}
-		// copies arr from element idx+1 to last element
 		for (int i = idx + 1; i <= arr.length-1; i++){
 			removeIdx[i-1] = arr[i];
 		}
@@ -66,10 +65,8 @@ public class ArraysLab3 {
 	// returns an integer
 	public static int sumEven(int[] arr)
 	{
-		// assume arr length greater than 0
 		assert (arr.length > 0);
 		int sumEven = 0;
-		// for loop that adds elements at every 2 indices
 		for (int i = 0; i <= arr.length - 1; i += 2){
 			sumEven += arr[i];
 		}
@@ -82,15 +79,11 @@ public class ArraysLab3 {
 	// returns an array
 	public static int[] rotateRight(int[] arr)
 	{
-		// assume arr length greater than 0
 		assert (arr.length > 0);
-		// declares last as the last element in the array
 		int last = arr[arr.length - 1];
-		// shifts all elements one index up
 		for (int i = arr.length-1; i > 0; i--) {
 			arr[i] = arr[i-1];
 		}
-		// places the last element of arr in index 0
 		arr[0] = last;
 		return arr;
 		
