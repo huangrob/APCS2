@@ -34,8 +34,8 @@ public class FracCalc {
 				whole = secondOperand;
 				numerator = "0";
 				denominator = "1";
-			}		
-		}
+			}
+		
 	}
-}
+	
 }
