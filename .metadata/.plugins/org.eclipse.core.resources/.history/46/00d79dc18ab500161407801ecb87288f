@@ -6,33 +6,33 @@ public class FracCalc {
 		Scanner userInput = new Scanner(System.in);
 		System.out.println("Enter two mixed fractions (with underscore representing \"and\") separated by spaces and an operator.");
 		String mixedFraction = userInput.nextLine();
-		do {
-			if (mixedFraction.contains(" ") && (mixedFraction.contains("+")||mixedFraction.contains("-")||mixedFraction.contains("*")||mixedFraction.contains("/"))){
-				System.out.println(produceAnswer(mixedFraction));
-			} 
-			else {
-				System.out.println("Please enter a fraction with an operator and spaces between each term.");
+			do {
+				if (mixedFraction.contains(" ") && (mixedFraction.contains("+")||mixedFraction.contains("-")||mixedFraction.contains("*")||mixedFraction.contains("/"))){
+					System.out.println(produceAnswer(mixedFraction));
+				} 
+				else {
+					System.out.println("Please enter a fraction with an operator and spaces between each term.");
+				}
+				System.out.println("If you wish to quit, type quit");
+				System.out.println("Enter two mixed fractions (with underscore representing \"and\") separated by spaces and an operator.");
+				mixedFraction = userInput.nextLine();
 			}
-			System.out.println("If you wish to quit, type quit");
-			System.out.println("Enter two mixed fractions (with underscore representing \"and\") separated by spaces and an operator.");
-			mixedFraction = userInput.nextLine();
-		}
-		while (!mixedFraction.equals("quit"));
+			while (!mixedFraction.equals("quit"));
 	}
 	
-	public static String produceAnswer(String mixedFraction){
+	public static void produceAnswer(String mixedFraction){
 		if (mixedFraction.contains(" ")){
 			String[] produceAnswer = mixedFraction.split(" ");
 			String secondOperand = produceAnswer[2];
 			if (secondOperand.contains("_") && secondOperand.contains("/")){
-				return mixedFraction(secondOperand);
+				mixedFraction(secondOperand);
 			} else if (!secondOperand.contains("/") && !secondOperand.contains("_")){
-				return integer(secondOperand);
+				integer(secondOperand);
 			} else {
-				return improperFraction(secondOperand);
+				improperFraction(secondOperand);
 			}
 		} else {
-			return "Please enter spaces between the fractions.";
+			System.out.println("Please enter spaces between the fractions.");
 		}
 	}
 	
