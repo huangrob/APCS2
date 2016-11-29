@@ -23,44 +23,93 @@ public class FracCalc {
 	public static String produceAnswer(String mixedFraction){
 		if (mixedFraction.contains(" ")){
 			String[] produceAnswer = mixedFraction.split(" ");
-			String secondOperand = produceAnswer[2];
-			if (secondOperand.contains("_") && secondOperand.contains("/")){
-				return mixedFraction(secondOperand);
-			} else if (!secondOperand.contains("/") && !secondOperand.contains("_")){
-				return integer(secondOperand);
-			} else {
-				return improperFraction(secondOperand);
-			}
+			String[] firstOperand = produceFirstOperand(produceAnswer);
+			String[] secondOperand = produceSecondOperand(produceAnswer);
+			String operator = produceAnswer[1];
+			return "First: " + Arrays.toString(firstOperand) + "\nSecond: " + Arrays.toString(secondOperand) + "\nOperator: " + operator;
 		} else {
 			return "Please enter spaces between the fractions.";
 		}
 	}
 	
-	public static String mixedFraction (String secondOperand){
+	public static String[] calculateEquation (String[] firstOperand, String[] secondOperand, String operator){
+		if (operator.equals("+")){
+			add(firstOperand, secondOperand);
+		}
+		if (operator.equals("-")){
+			subtract(firstOperand, secondOperand);
+		}
+		if (operator.equals("*")){
+			multiply(firstOperand, secondOperand);
+		}
+		if (operator.equals("/")){
+			divide(firstOperand, secondOperand);
+		}
+	}
+	
+	public static String[] produceFirstOperand(String[] produceAnswer) {
+		String firstOperand = produceAnswer[0];
+		if (firstOperand.contains("_") && firstOperand.contains("/")){
+			return mixed(firstOperand);
+		} else if (!firstOperand.contains("/") && !firstOperand.contains("_")){
+			return integer(firstOperand);
+		} else {
+			return improper(firstOperand);
+		}
+	}
+	
+	public static String[] produceSecondOperand (String[] produceAnswer) {
+		String secondOperand = produceAnswer[2];
+		if (secondOperand.contains("_") && secondOperand.contains("/")){
+			return mixed(secondOperand);
+		} else if (!secondOperand.contains("/") && !secondOperand.contains("_")){
+			return integer(secondOperand);
+		} else {
+			return improper(secondOperand);
+		}
+	}
+	
+	public static String[] mixed (String secondOperand){
 		String[] produceAnswerWhole = secondOperand.split("_");
 		String whole = produceAnswerWhole[0];
 		String fraction = produceAnswerWhole[1];
 		String[] produceAnswerFrac = fraction.split("/");
 		String numerator = produceAnswerFrac[0];
 		String denominator = produceAnswerFrac[1];
-		String parsedFraction = "whole:" + whole + " numerator:" + numerator + " denominator:" + denominator;
+		String[] parsedFraction = {whole, numerator, denominator};
 		return parsedFraction;
 	}
 	
-	public static String integer (String secondOperand){
+	public static String[] integer (String secondOperand){
 		String whole = secondOperand;
 		String numerator = "0";
 		String denominator = "1";
-		String parsedFraction = "whole:" + whole + " numerator:" + numerator + " denominator:" + denominator;
+		String[] parsedFraction = {whole, numerator, denominator};
 		return parsedFraction;
 	}
 	
-	public static String improperFraction (String secondOperand){
+	public static String[] improper (String secondOperand){
 		String[] produceAnswerFrac = secondOperand.split("/");
 		String numerator = produceAnswerFrac[0];
 		String denominator = produceAnswerFrac[1];
 		String whole = "0";
-		String parsedFraction = "whole:" + whole + " numerator:" + numerator + " denominator:" + denominator;
+		String[] parsedFraction = {whole, numerator, denominator};
 		return parsedFraction;
+	}
+	
+	public static String[] add (String[] firstOperand, String[] secondOperand){
+		
+	}
+	
+	public static String[] subtract (String[] firstOperand, String[] secondOperand){
+		
+	}
+	
+	public static String[] multiply (String[] firstOperand, String[] secondOperand){
+		
+	}
+	
+	public static String[] divide (String[] firstOperand, String[] secondOperand){
+		
 	}
 }
