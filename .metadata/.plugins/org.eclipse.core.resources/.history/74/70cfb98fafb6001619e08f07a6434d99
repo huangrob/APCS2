@@ -140,30 +140,4 @@ public class FracCalc {
 		}
 		return answer;
 	}
-	
-	public static String toImproperFrac(int num1, int num2, int num3){
-		return (num1 * num3 + num2) + "/" + num3;
-	}
-	
-	public static String toMixedNum(int num1, int num2){
-		return (num1/num2 + "_" + num1 % num2 + "/" + num2);
-	}
-	
-	public static int gcf(int num1, int num2){
-		int gcf = 1;
-		if(num1 > num2){
-			for(int i = num2; i >= 1; i--){
-				if(num1 % i == 0 && num2 % i == 0){
-					return i;
-				}
-			}
-		} else {
-			for(int j = num1; j >=1; j--){
-				if(num1 % j == 0 && num2 % j == 0){
-					return j;
-				}
-			}
-		}
-		return gcf;
-	}
 }

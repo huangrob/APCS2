@@ -1,0 +1,4 @@
+#Tue Nov 29 19:09:06 PST 2016
+__DEFAULT__=false
+org.eclipse.help.ui.localSearch.master=true
+expression=zoom
