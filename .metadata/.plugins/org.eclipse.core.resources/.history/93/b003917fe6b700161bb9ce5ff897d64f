@@ -121,8 +121,7 @@ public class FracCalc {
 		}
 		else {
 			int gcf = gcf(firstOperand[2], secondOperand[2]);
-			answer[1] = firstOperand[1] * (gcf/firstOperand[2]) + secondOperand[1] * (gcf/secondOperand[2]);
-			answer[2] = gcf;
+			
 		}
 		return answer;
 	}

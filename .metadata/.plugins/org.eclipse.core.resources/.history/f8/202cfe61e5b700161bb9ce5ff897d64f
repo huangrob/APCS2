@@ -35,8 +35,6 @@ public class FracCalc {
 	public static String calculateEquation (String[] firstOperand, String[] secondOperand, String operator){
 		int[] first = stringToInt(firstOperand);
 		int[] second = stringToInt(secondOperand);
-		first = toImproperFrac(first);
-		second = toImproperFrac(second);
 		String answer = "";
 		if (operator.equals("+")){
 			answer = Arrays.toString(add(first, second));
@@ -119,11 +117,6 @@ public class FracCalc {
 			}
 			answer[2] = firstOperand[2];
 		}
-		else {
-			int gcf = gcf(firstOperand[2], secondOperand[2]);
-			answer[1] = firstOperand[1] * (gcf/firstOperand[2]) + secondOperand[1] * (gcf/secondOperand[2]);
-			answer[2] = gcf;
-		}
 		return answer;
 	}
 	
@@ -151,12 +144,8 @@ public class FracCalc {
 		return answer;
 	}
 	
-	public static int[] toImproperFrac(int[] operand){
-		int[] improperFrac = new int[3];
-		improperFrac[0] = 0;
-		improperFrac[1] = operand[0] * operand[2] + operand[1];
-		improperFrac[2] = operand[2];
-		return improperFrac;
+	public static String toImproperFrac(int[] operand){
+		return (operand[0] * operand[2] + operand[1]) + "/" + operand[2];
 	}
 	
 	public static String toMixedNum(int num1, int num2){
