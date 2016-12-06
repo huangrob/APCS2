@@ -51,7 +51,6 @@ public class FracCalc {
 		else if (operator.equals("/")){
 			answer = divide(first, second);
 		}
-		answer = reduceFraction(answer);
 		return (answer[0] + "_" + answer[1] + "/" + answer[2]);
 	}
 	
@@ -162,8 +161,9 @@ public class FracCalc {
 			answer[2] = 1;
 		}
 		else {
-			answer[1] = firstOperand[1] * secondOperand[2];
-			answer[2] = firstOperand[2] * secondOperand[1];
+			for (int j = 1; j <= 2; j++) {
+				answer[j] = firstOperand[j] / secondOperand[j];
+			}
 		}
 		return answer;
 	}
@@ -174,6 +174,10 @@ public class FracCalc {
 		improperFrac[1] = operand[0] * operand[2] + operand[1];
 		improperFrac[2] = operand[2];
 		return improperFrac;
+	}
+	
+	public static String toMixedNum(int num1, int num2){
+		return (num1/num2 + "_" + num1 % num2 + "/" + num2);
 	}
 	
 	public static int gcf(int num1, int num2){
@@ -194,28 +198,13 @@ public class FracCalc {
 		return gcf;
 	}
 	
-	public static int[] reduceFraction(int[] fraction){
-		int gcf = gcf(fraction[1], fraction[2]);
-		if (gcf == 1){
-			return fraction;
-		}
-		else if (gcf > 1){
-			fraction[1] = fraction[1] / gcf;
-			fraction[2] = fraction[2] / gcf;
-		}
-		return fraction;
-	}
-	
-	public static int[] toMixedNum(int[] improperFrac){
-		int[] mixedNum = new int[3];
-		if (improperFrac[1] >= improperFrac[2]){
-			mixedNum[0] = improperFrac[1] / improperFrac[2];
-		}
-		else if (improperFrac[1] < improperFrac[2]){
-			mixedNum[0] = 0;
-		}
-		mixedNum[1] = improperFrac[1] % improperFrac[2];
-		return mixedNum;
-	}
-
+	//public static int[] intoCommonDenominator(int[] firstOperand, int[] secondOperand){
+		//int gcf = gcf(firstOperand[2], secondOperand[2]);
+		//int[] first = new int[3];
+		//int[] second = new int[3];
+		//first[1] = firstOperand[1] * (gcf/secondOperand[2]);
+		//first[2] = firstOperand[2] * (gcf/secondOperand[2]);
+		//second[1] = secondOperand[1] * (gcf/firstOperand[2]);
+		//second[2] = secondOperand[2] * (gcf/firstOperand[2]);
+		//}
 }
