@@ -229,9 +229,6 @@ public class FracCalc {
 		else if (mixedNum[0] == 0 && mixedNum[1] == 0){
 			return ("0");
 		}
-		else if (mixedNum[0] != 0 && mixedNum[1] == 0){
-			return mixedNum[0] + "";
-		}
 		else {
 			return (mixedNum[0] + "_" + mixedNum[1] + "/" + mixedNum[2]);
 		}

@@ -1,3 +1,4 @@
+package fracCalc;
 import java.util.*;
 
 public class FracCalc {
@@ -23,8 +24,8 @@ public class FracCalc {
 	public static String produceAnswer(String mixedFraction){
 		if (mixedFraction.contains(" ")){
 			String[] partsOfFrac = mixedFraction.split(" ");
-			String[] firstOperand = produceFirstOperand(partsOfFrac);
-			String[] secondOperand = produceSecondOperand(partsOfFrac);
+			String[] firstOperand = produceOperand(partsOfFrac, 0);
+			String[] secondOperand = produceOperand(partsOfFrac, 2);
 			String operator = partsOfFrac[1];
 			return calculateEquation(firstOperand, secondOperand, operator);
 		} else {
@@ -35,48 +36,40 @@ public class FracCalc {
 	public static String calculateEquation (String[] firstOperand, String[] secondOperand, String operator){
 		int[] first = stringToInt(firstOperand);
 		int[] second = stringToInt(secondOperand);
-		String answer = "";
+		first = toImproperFrac(first);
+		second = toImproperFrac(second);
+		int[] answer = new int[3];
 		if (operator.equals("+")){
-			answer = Arrays.toString(add(first, second));
+			answer = add(first, second);
 		}
-		if (operator.equals("-")){
-			answer = Arrays.toString(subtract(first, second));
+		else if (operator.equals("-")){
+			answer = subtract(first, second);
 		}
-		if (operator.equals("*")){
-			answer = Arrays.toString(multiply(first, second));
+		else if (operator.equals("*")){
+			answer = multiply(first, second);
 		}
-		if (operator.equals("/")){
-			answer = Arrays.toString(divide(first, second));
+		else if (operator.equals("/")){
+			answer = divide(first, second);
 		}
-		return answer;
+		answer = reduceFraction(answer);
+		return (answer[0] + "_" + answer[1] + "/" + answer[2]);
 	}
 	
-	public static String[] produceFirstOperand(String[] partsOfFrac) {
-		String firstOperand = partsOfFrac[0];
-		if (firstOperand.contains("_") && firstOperand.contains("/")){
-			return mixed(firstOperand);
-		} else if (!firstOperand.contains("/") && !firstOperand.contains("_")){
-			return integer(firstOperand);
+	public static String[] produceOperand(String[] partsOfFrac, int element) {
+		String operand = partsOfFrac[element];
+		if (operand.contains("_") && operand.contains("/")){
+			return mixed(operand);
+		} else if (!operand.contains("/") && !operand.contains("_")){
+			return integer(operand);
 		} else {
-			return improper(firstOperand);
+			return improper(operand);
 		}
 	}
 	
-	public static String[] produceSecondOperand (String[] partsOfFrac) {
-		String secondOperand = partsOfFrac[2];
-		if (secondOperand.contains("_") && secondOperand.contains("/")){
-			return mixed(secondOperand);
-		} else if (!secondOperand.contains("/") && !secondOperand.contains("_")){
-			return integer(secondOperand);
-		} else {
-			return improper(secondOperand);
-		}
-	}
-	
-	public static String[] mixed (String secondOperand){
-		String[] produceAnswerWhole = secondOperand.split("_");
-		String whole = produceAnswerWhole[0];
-		String fraction = produceAnswerWhole[1];
+	public static String[] mixed (String operand){
+		String[] produceWhole = operand.split("_");
+		String whole = produceWhole[0];
+		String fraction = produceWhole[1];
 		String[] produceAnswerFrac = fraction.split("/");
 		String numerator = produceAnswerFrac[0];
 		String denominator = produceAnswerFrac[1];
@@ -84,16 +77,16 @@ public class FracCalc {
 		return parsedFraction;
 	}
 	
-	public static String[] integer (String secondOperand){
-		String whole = secondOperand;
+	public static String[] integer (String operand){
+		String whole = operand;
 		String numerator = "0";
 		String denominator = "1";
 		String[] parsedFraction = {whole, numerator, denominator};
 		return parsedFraction;
 	}
 	
-	public static String[] improper (String secondOperand){
-		String[] produceAnswerFrac = secondOperand.split("/");
+	public static String[] improper (String operand){
+		String[] produceAnswerFrac = operand.split("/");
 		String numerator = produceAnswerFrac[0];
 		String denominator = produceAnswerFrac[1];
 		String whole = "0";
@@ -103,6 +96,9 @@ public class FracCalc {
 	
 	public static int[] stringToInt (String[] stringArray){
 		int[] intArray = new int[3];
+		if (stringArray[0].contains("-")){
+			stringArray[1] = "-" + stringArray[1];
+		}
 		for (int i = 0; i <= 2; i++) {
 			intArray[i] = Integer.parseInt(stringArray[i]);
 		}
@@ -117,39 +113,67 @@ public class FracCalc {
 			}
 			answer[2] = firstOperand[2];
 		}
+		else {
+			int gcf = gcf(firstOperand[2], secondOperand[2]);
+			answer[1] = (firstOperand[1] * (secondOperand[2]/gcf) + (secondOperand[1] * (firstOperand[2])/gcf));
+			answer[2] = firstOperand[2] * (secondOperand[2]/gcf);
+		}
 		return answer;
 	}
 	
 	public static int[] subtract (int[] firstOperand, int[] secondOperand){
 		int[] answer = new int[3];
-		for (int i = 0; i <= 2; i++) {
-			answer[i] = firstOperand[i] - secondOperand[i];
+		if (firstOperand[2] == secondOperand[2]){
+			for (int i = 0; i <= 1; i++) {
+				answer[i] = firstOperand[i] - secondOperand[i];
+			}
+			answer[2] = firstOperand[2];
+		}
+		else {
+			int gcf = gcf(firstOperand[2], secondOperand[2]);
+			answer[1] = (firstOperand[1] * (secondOperand[2]/gcf) - (secondOperand[1] * (firstOperand[2])/gcf));
+			answer[2] = firstOperand[2] * (secondOperand[2]/gcf);
 		}
 		return answer;
 	}
 	
 	public static int[] multiply (int[] firstOperand, int[] secondOperand){
 		int[] answer = new int[3];
-		for (int i = 0; i <= 2; i++) {
-			answer[i] = firstOperand[i] * secondOperand[i];
+		if (firstOperand[1] * secondOperand[1] == 0){
+			for(int i = 0; i <= 1; i++){
+				answer[i] = 0;
+			}
+			answer[2] = 1;
+		}
+		else {
+			for (int j = 1; j <= 2; j++) {
+				answer[j] = firstOperand[j] * secondOperand[j];
+			}
 		}
 		return answer;
 	}
 	
 	public static int[] divide (int[] firstOperand, int[] secondOperand){
 		int[] answer = new int[3];
-		for (int i = 0; i <= 2; i++) {
-			answer[i] = firstOperand[i] / secondOperand[i];
+		if (firstOperand[1] == 0){
+			for(int i = 0; i <= 1; i++){
+				answer[i] = 0;
+			}
+			answer[2] = 1;
+		}
+		else {
+			answer[1] = firstOperand[1] * secondOperand[2];
+			answer[2] = firstOperand[2] * secondOperand[1];
 		}
 		return answer;
 	}
 	
-	public static String toImproperFrac(int[] operand){
-		return (operand[0] * operand[2] + operand[1]) + "/" + operand[2];
-	}
-	
-	public static String toMixedNum(int num1, int num2){
-		return (num1/num2 + "_" + num1 % num2 + "/" + num2);
+	public static int[] toImproperFrac(int[] operand){
+		int[] improperFrac = new int[3];
+		improperFrac[0] = 0;
+		improperFrac[1] = operand[0] * operand[2] + operand[1];
+		improperFrac[2] = operand[2];
+		return improperFrac;
 	}
 	
 	public static int gcf(int num1, int num2){
@@ -169,4 +193,29 @@ public class FracCalc {
 		}
 		return gcf;
 	}
+	
+	public static int[] reduceFraction(int[] fraction){
+		int gcf = gcf(fraction[1], fraction[2]);
+		if (gcf == 1){
+			return fraction;
+		}
+		else if (gcf > 1){
+			fraction[1] = fraction[1] / gcf;
+			fraction[2] = fraction[2] / gcf;
+		}
+		return fraction;
+	}
+	
+	public static int[] toMixedNum(int[] improperFrac){
+		int[] mixedNum = new int[3];
+		if (improperFrac[1] >= improperFrac[2]){
+			mixedNum[0] = improperFrac[1] / improperFrac[2];
+		}
+		else if (improperFrac[1] < improperFrac[2]){
+			mixedNum[0] = 0;
+		}
+		mixedNum[1] = improperFrac[1] % improperFrac[2];
+		return mixedNum;
+	}
+
 }

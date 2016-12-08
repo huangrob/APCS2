@@ -52,9 +52,7 @@ public class FracCalc {
 			answer = divide(first, second);
 		}
 		answer = reduceFraction(answer);
-		answer = toMixedNum(answer);
-		String finalAnswer = toString(answer);
-		return finalAnswer;
+		return answer;
 	}
 	
 	public static String[] produceOperand(String[] partsOfFrac, int element) {
@@ -228,9 +226,6 @@ public class FracCalc {
 		}
 		else if (mixedNum[0] == 0 && mixedNum[1] == 0){
 			return ("0");
-		}
-		else if (mixedNum[0] != 0 && mixedNum[1] == 0){
-			return mixedNum[0] + "";
 		}
 		else {
 			return (mixedNum[0] + "_" + mixedNum[1] + "/" + mixedNum[2]);
