@@ -215,7 +215,7 @@ public class FracCalc {
 			mixedNum[0] = improperFrac[1] / improperFrac[2];
 		}
 		else if (improperFrac[1] < improperFrac[2]){
-			mixedNum[0] = 0;
+			mixedNum[0] = improperFrac[0];
 		}
 		mixedNum[1] = improperFrac[1] % improperFrac[2];
 		mixedNum[2] = improperFrac[2];

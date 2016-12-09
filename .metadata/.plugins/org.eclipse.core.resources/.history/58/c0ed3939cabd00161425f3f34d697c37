@@ -1,0 +1,26 @@
+
+public class Test {
+	
+	public static int gcf(int num1, int num2){
+		int gcf = 1;
+		if(num1 > num2){
+			for(int i = num2; i >= 1; i--){
+				if(num1 % i == 0 && num2 % i == 0){
+					return i;
+				}
+			}
+		} else {
+			for(int j = num1; j >=1; j--){
+				if(num1 % j == 0 && num2 % j == 0){
+					return j;
+				}
+			}
+		}
+		return gcf;
+	}
+	
+	public static void main (String[] args){
+		System.out.println(gcf(0,1));
+	}
+	
+}
