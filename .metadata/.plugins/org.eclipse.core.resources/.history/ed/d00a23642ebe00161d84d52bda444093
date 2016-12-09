@@ -79,7 +79,7 @@ import java.util.*;
 		
 		public static int[] stringToInt (String[] stringArray){
 			int[] intArray = new int[3];
-			if (stringArray[0].contains("-") && !stringArray[1].contains("0")){
+			if (stringArray[0].contains("-")){
 				stringArray[1] = "-" + stringArray[1];
 			}
 			for (int i = 0; i <= 2; i++) {
@@ -220,9 +220,5 @@ import java.util.*;
 	
 		public static void main (String[] args){
 			System.out.println(produceAnswer("-9035 + 0"));
-			String[] a = {"-9035, 0, 1"};
-			String[] b = {"0, 0, 1"};
-			String operator = "+";
-			System.out.println(calculateEquation(a, b, operator));
 		}
 	}

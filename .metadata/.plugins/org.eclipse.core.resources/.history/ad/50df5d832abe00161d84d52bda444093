@@ -1,3 +1,4 @@
+package fracCalc;
 import java.util.*;
 
 public class FracCalc {
@@ -37,20 +38,23 @@ public class FracCalc {
 		int[] second = stringToInt(secondOperand);
 		first = toImproperFrac(first);
 		second = toImproperFrac(second);
-		String answer = "";
+		int[] answer = new int[3];
 		if (operator.equals("+")){
-			answer = Arrays.toString(add(first, second));
+			answer = add(first, second);
 		}
-		if (operator.equals("-")){
-			answer = Arrays.toString(subtract(first, second));
+		else if (operator.equals("-")){
+			answer = subtract(first, second);
 		}
-		if (operator.equals("*")){
-			answer = Arrays.toString(multiply(first, second));
+		else if (operator.equals("*")){
+			answer = multiply(first, second);
 		}
-		if (operator.equals("/")){
-			answer = Arrays.toString(divide(first, second));
+		else if (operator.equals("/")){
+			answer = divide(first, second);
 		}
-		return answer;
+		answer = reduceFraction(answer);
+		answer = toMixedNum(answer);
+		String finalAnswer = toString(answer);
+		return finalAnswer;
 	}
 	
 	public static String[] produceOperand(String[] partsOfFrac, int element) {
@@ -94,6 +98,9 @@ public class FracCalc {
 	
 	public static int[] stringToInt (String[] stringArray){
 		int[] intArray = new int[3];
+		if (stringArray[0].contains("-")){
+			stringArray[1] = "-" + stringArray[1];
+		}
 		for (int i = 0; i <= 2; i++) {
 			intArray[i] = Integer.parseInt(stringArray[i]);
 		}
@@ -110,32 +117,55 @@ public class FracCalc {
 		}
 		else {
 			int gcf = gcf(firstOperand[2], secondOperand[2]);
-			answer[1] = firstOperand[1] * (gcf/firstOperand[2]) + secondOperand[1] * (gcf/secondOperand[2]);
-			answer[2] = gcf;
+			answer[1] = (firstOperand[1] * (secondOperand[2]/gcf) + (secondOperand[1] * (firstOperand[2])/gcf));
+			answer[2] = firstOperand[2] * (secondOperand[2]/gcf);
 		}
 		return answer;
 	}
 	
 	public static int[] subtract (int[] firstOperand, int[] secondOperand){
 		int[] answer = new int[3];
-		for (int i = 0; i <= 2; i++) {
-			answer[i] = firstOperand[i] - secondOperand[i];
+		if (firstOperand[2] == secondOperand[2]){
+			for (int i = 0; i <= 1; i++) {
+				answer[i] = firstOperand[i] - secondOperand[i];
+			}
+			answer[2] = firstOperand[2];
+		}
+		else {
+			int gcf = gcf(firstOperand[2], secondOperand[2]);
+			answer[1] = (firstOperand[1] * (secondOperand[2]/gcf) - (secondOperand[1] * (firstOperand[2])/gcf));
+			answer[2] = firstOperand[2] * (secondOperand[2]/gcf);
 		}
 		return answer;
 	}
 	
 	public static int[] multiply (int[] firstOperand, int[] secondOperand){
 		int[] answer = new int[3];
-		for (int i = 0; i <= 2; i++) {
-			answer[i] = firstOperand[i] * secondOperand[i];
+		if (firstOperand[1] * secondOperand[1] == 0){
+			for(int i = 0; i <= 1; i++){
+				answer[i] = 0;
+			}
+			answer[2] = 1;
+		}
+		else {
+			for (int j = 1; j <= 2; j++) {
+				answer[j] = firstOperand[j] * secondOperand[j];
+			}
 		}
 		return answer;
 	}
 	
 	public static int[] divide (int[] firstOperand, int[] secondOperand){
 		int[] answer = new int[3];
-		for (int i = 0; i <= 2; i++) {
-			answer[i] = firstOperand[i] / secondOperand[i];
+		if (firstOperand[1] == 0){
+			for(int i = 0; i <= 1; i++){
+				answer[i] = 0;
+			}
+			answer[2] = 1;
+		}
+		else {
+			answer[1] = firstOperand[1] * secondOperand[2];
+			answer[2] = firstOperand[2] * secondOperand[1];
 		}
 		return answer;
 	}
@@ -146,10 +176,6 @@ public class FracCalc {
 		improperFrac[1] = operand[0] * operand[2] + operand[1];
 		improperFrac[2] = operand[2];
 		return improperFrac;
-	}
-	
-	public static String toMixedNum(int num1, int num2){
-		return (num1/num2 + "_" + num1 % num2 + "/" + num2);
 	}
 	
 	public static int gcf(int num1, int num2){
@@ -169,4 +195,46 @@ public class FracCalc {
 		}
 		return gcf;
 	}
+	
+	public static int[] reduceFraction(int[] fraction){
+		int gcf = gcf(fraction[1], fraction[2]);
+		if (gcf == 1){
+			return fraction;
+		}
+		else if (gcf > 1){
+			fraction[1] = fraction[1] / gcf;
+			fraction[2] = fraction[2] / gcf;
+		}
+		fraction = toMixedNum(fraction);
+		return fraction;
+	}
+	
+	public static int[] toMixedNum(int[] improperFrac){
+		int[] mixedNum = new int[3];
+		if (improperFrac[1] >= improperFrac[2]){
+			mixedNum[0] = improperFrac[1] / improperFrac[2];
+		}
+		else if (improperFrac[1] < improperFrac[2]){
+			mixedNum[0] = improperFrac[0];
+		}
+		mixedNum[1] = improperFrac[1] % improperFrac[2];
+		mixedNum[2] = improperFrac[2];
+		return mixedNum;
+	}
+	
+	public static String toString(int[] mixedNum){
+		if (mixedNum[0] == 0 && mixedNum[1] != 0){
+			return (mixedNum[1] + "/" + mixedNum[2]);
+		}
+		else if (mixedNum[0] == 0 && mixedNum[1] == 0){
+			return ("0");
+		}
+		else if (mixedNum[0] != 0 && mixedNum[1] == 0){
+			return mixedNum[0] + "";
+		}
+		else {
+			return (mixedNum[0] + "_" + mixedNum[1] + "/" + mixedNum[2]);
+		}
+	}
+
 }

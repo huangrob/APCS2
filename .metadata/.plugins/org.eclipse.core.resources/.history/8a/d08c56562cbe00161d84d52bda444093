@@ -198,7 +198,7 @@ public class FracCalc {
 	
 	public static int[] reduceFraction(int[] fraction){
 		int gcf = gcf(fraction[1], fraction[2]);
-		if (gcf == 1) {
+		if (gcf == 1 || fraction[1] == 0) {
 			return fraction;
 		}
 		else if (gcf > 1){

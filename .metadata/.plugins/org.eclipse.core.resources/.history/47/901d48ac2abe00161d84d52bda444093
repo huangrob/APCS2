@@ -198,7 +198,7 @@ public class FracCalc {
 	
 	public static int[] reduceFraction(int[] fraction){
 		int gcf = gcf(fraction[1], fraction[2]);
-		if (gcf == 1) {
+		if (gcf == 1){
 			return fraction;
 		}
 		else if (gcf > 1){
@@ -213,11 +213,12 @@ public class FracCalc {
 		int[] mixedNum = new int[3];
 		if (improperFrac[1] >= improperFrac[2]){
 			mixedNum[0] = improperFrac[1] / improperFrac[2];
+			mixedNum[1] = improperFrac[1] % improperFrac[2];
 		}
 		else if (improperFrac[1] < improperFrac[2]){
 			mixedNum[0] = improperFrac[0];
+			mixedNum[1] = improperFrac[2] % improperFrac[1];
 		}
-		mixedNum[1] = improperFrac[1] % improperFrac[2];
 		mixedNum[2] = improperFrac[2];
 		return mixedNum;
 	}
