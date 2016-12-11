@@ -16,48 +16,29 @@ import java.util.*;
 		
 		public static String calculateEquation (String[] firstOperand, String[] secondOperand, String operator){
 			int[] first = stringToInt(firstOperand);
+			System.out.println(Arrays.toString(first));
 			int[] second = stringToInt(secondOperand);
+			System.out.println(Arrays.toString(second));
 			first = toImproperFrac(first);
 			second = toImproperFrac(second);
+			System.out.println(Arrays.toString(first));
+			System.out.println(Arrays.toString(second));
 			int[] answer = new int[3];
-			if (operator.equals("+")){
 				answer = add(first, second);
-			}
-			else if (operator.equals("-")){
-				answer = subtract(first, second);
-			}
-			else if (operator.equals("*")){
-				answer = multiply(first, second);
-			}
-			else if (operator.equals("/")){
-				answer = divide(first, second);
-			}
+
+			System.out.println(Arrays.toString(answer));
 			answer = reduceFraction(answer);
+			System.out.println(Arrays.toString(answer));
 			answer = toMixedNum(answer);
+			System.out.println(Arrays.toString(answer));
 			String finalAnswer = toString(answer);
-			return finalAnswer;
+			System.out.println(finalAnswer);
+			return finalAnswer;	
 		}
 		
 		public static String[] produceOperand(String[] partsOfFrac, int element) {
 			String operand = partsOfFrac[element];
-			if (operand.contains("_") && operand.contains("/")){
-				return mixed(operand);
-			} else if (!operand.contains("/") && !operand.contains("_")){
-				return integer(operand);
-			} else {
-				return improper(operand);
-			}
-		}
-		
-		public static String[] mixed (String operand){
-			String[] produceWhole = operand.split("_");
-			String whole = produceWhole[0];
-			String fraction = produceWhole[1];
-			String[] produceAnswerFrac = fraction.split("/");
-			String numerator = produceAnswerFrac[0];
-			String denominator = produceAnswerFrac[1];
-			String[] parsedFraction = {whole, numerator, denominator};
-			return parsedFraction;
+			return integer(operand);
 		}
 		
 		public static String[] integer (String operand){
@@ -67,15 +48,7 @@ import java.util.*;
 			String[] parsedFraction = {whole, numerator, denominator};
 			return parsedFraction;
 		}
-		
-		public static String[] improper (String operand){
-			String[] produceAnswerFrac = operand.split("/");
-			String numerator = produceAnswerFrac[0];
-			String denominator = produceAnswerFrac[1];
-			String whole = "0";
-			String[] parsedFraction = {whole, numerator, denominator};
-			return parsedFraction;
-		}
+
 		
 		public static int[] stringToInt (String[] stringArray){
 			int[] intArray = new int[3];
@@ -103,54 +76,7 @@ import java.util.*;
 			}
 			return answer;
 		}
-		
-		public static int[] subtract (int[] firstOperand, int[] secondOperand){
-			int[] answer = new int[3];
-			if (firstOperand[2] == secondOperand[2]){
-				for (int i = 0; i <= 1; i++) {
-					answer[i] = firstOperand[i] - secondOperand[i];
-				}
-				answer[2] = firstOperand[2];
-			}
-			else {
-				int gcf = gcf(firstOperand[2], secondOperand[2]);
-				answer[1] = (firstOperand[1] * (secondOperand[2]/gcf) - (secondOperand[1] * (firstOperand[2])/gcf));
-				answer[2] = firstOperand[2] * (secondOperand[2]/gcf);
-			}
-			return answer;
-		}
-		
-		public static int[] multiply (int[] firstOperand, int[] secondOperand){
-			int[] answer = new int[3];
-			if (firstOperand[1] * secondOperand[1] == 0){
-				for(int i = 0; i <= 1; i++){
-					answer[i] = 0;
-				}
-				answer[2] = 1;
-			}
-			else {
-				for (int j = 1; j <= 2; j++) {
-					answer[j] = firstOperand[j] * secondOperand[j];
-				}
-			}
-			return answer;
-		}
-		
-		public static int[] divide (int[] firstOperand, int[] secondOperand){
-			int[] answer = new int[3];
-			if (firstOperand[1] == 0){
-				for(int i = 0; i <= 1; i++){
-					answer[i] = 0;
-				}
-				answer[2] = 1;
-			}
-			else {
-				answer[1] = firstOperand[1] * secondOperand[2];
-				answer[2] = firstOperand[2] * secondOperand[1];
-			}
-			return answer;
-		}
-		
+				
 		public static int[] toImproperFrac(int[] operand){
 			int[] improperFrac = new int[3];
 			improperFrac[0] = 0;
@@ -179,20 +105,22 @@ import java.util.*;
 		
 		public static int[] reduceFraction(int[] fraction){
 			int gcf = gcf(fraction[1], fraction[2]);
-			if (gcf == 1) {
-				return fraction;
-			}
-			else if (gcf > 1){
+			System.out.println(gcf);
+			if (gcf > 1){
 				fraction[1] = fraction[1] / gcf;
 				fraction[2] = fraction[2] / gcf;
 			}
+			System.out.println(fraction[0]);
+			System.out.println(fraction[1]);
+			System.out.println(fraction[2]);
 			fraction = toMixedNum(fraction);
+			System.out.println(Arrays.toString(fraction));
 			return fraction;
 		}
 		
 		public static int[] toMixedNum(int[] improperFrac){
 			int[] mixedNum = new int[3];
-			if (improperFrac[1] >= improperFrac[2]){
+			if (Math.abs(improperFrac[1]) >= improperFrac[2]){
 				mixedNum[0] = improperFrac[1] / improperFrac[2];
 			}
 			else if (improperFrac[1] < improperFrac[2]){
@@ -219,10 +147,13 @@ import java.util.*;
 		}
 	
 		public static void main (String[] args){
-			System.out.println(produceAnswer("-9035 + 0"));
-			String[] a = {"-9035, 0, 1"};
-			String[] b = {"0, 0, 1"};
+			String[] a = {"-9035", "0", "1"};
+			int [] aa = {-9035, 0, 1};
+			String[] b = {"0", "0", "1"};
+			int[] bb = {0,0,1};
+			int[] c = add(aa, bb);
 			String operator = "+";
-			System.out.println(calculateEquation(a, b, operator));
+			calculateEquation(a, b, operator);
+
 		}
 	}
