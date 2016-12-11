@@ -1,3 +1,8 @@
+// Robert Huang
+// 12/10/16
+// APCS Period 1
+// Fraction Calculator
+
 package fracCalc;
 import java.util.*;
 
@@ -17,7 +22,7 @@ public class FracCalc {
 			}
 			System.out.println("If you wish to quit, type quit");
 			System.out.println("Enter two mixed fractions (with underscore representing \"and\") separated by spaces and an operator.");
-			mixedFraction = userInput.nextLine(); //gets next equation
+			mixedFraction = userInput.nextLine(); //gets next equation from user
 		}
 		while (!mixedFraction.equals("quit")); //continually asks for input until user types quit
 	}
@@ -63,7 +68,7 @@ public class FracCalc {
 		return splitFraction;
 	}
 	
-	//this method will call the calculation methods and return the answer given by those calculations
+	//calculateEquation will call the calculation methods and return the answer given by those calculations
 	public static String calculateEquation (String[] firstOperand, String[] secondOperand, String operator){
 		//convert the components of each operand to integers
 		int[] first = stringToInt(firstOperand);
@@ -85,17 +90,17 @@ public class FracCalc {
 		else if (operator.equals("/")){
 			answer = divide(first, second);
 		}
-		answer = reduceFraction(answer); //sends the answer to reduceFraction
 		answer = toMixedNum(answer); //sends the answer to toMixedNum
+		answer = reduceFraction(answer); //sends the answer to reduceFraction
 		String finalAnswer = toString(answer); //converts the answer from an integer array to a String
 		return finalAnswer;
 	}
 	
-	//this method converts the string array into an integer array
+	//stringToInt converts the string array into an integer array
 	public static int[] stringToInt (String[] stringArray){
 		int[] intArray = new int[3];
 		if (stringArray[0].contains("-")){
-			stringArray[1] = "-" + stringArray[1]; //if the whole part is negative, the numerator is also negative
+			stringArray[1] = "-" + stringArray[1]; //if the whole component is negative, the numerator is also negative (this negative will be removed later)
 		}
 		for (int i = 0; i <= 2; i++) {
 			intArray[i] = Integer.parseInt(stringArray[i]); //parseInt converts strings to integers
@@ -103,7 +108,7 @@ public class FracCalc {
 		return intArray;
 	}
 	
-	//this method converts a fraction into an improper fraction
+	//toImproperFrac converts a fraction into an improper fraction
 	public static int[] toImproperFrac(int[] operand){
 		int[] improperFrac = new int[3];
 		improperFrac[0] = 0; //the whole part is equal to 0
@@ -112,125 +117,133 @@ public class FracCalc {
 		return improperFrac;
 	}
 	
-	//this method adds the two operands of the userInput
+	//add adds the two operands of the user input
 	public static int[] add (int[] firstOperand, int[] secondOperand){
 		int[] answer = new int[3];
-		if (firstOperand[2] == secondOperand[2]){
+		if (firstOperand[2] == secondOperand[2]){ //if the denominators are the same
 			for (int i = 0; i <= 1; i++) {
-				answer[i] = firstOperand[i] + secondOperand[i];
+				answer[i] = firstOperand[i] + secondOperand[i]; //adds the whole and numerator parts
 			}
-			answer[2] = firstOperand[2];
+			answer[2] = firstOperand[2]; //denominator stays the same
 		}
-		else {
-			int gcf = gcf(firstOperand[2], secondOperand[2]);
-			answer[1] = (firstOperand[1] * (secondOperand[2]/gcf) + (secondOperand[1] * (firstOperand[2])/gcf));
-			answer[2] = firstOperand[2] * (secondOperand[2]/gcf);
+		else { //if denominators are different
+			int gcf = gcf(firstOperand[2], secondOperand[2]); //find greatest common factor of the denominators
+			answer[1] = (firstOperand[1] * (secondOperand[2]/gcf) + (secondOperand[1] * (firstOperand[2])/gcf)); //add the fractions with a common denominator
+			answer[2] = firstOperand[2] * (secondOperand[2]/gcf); //denominator is now common denominator
 		}
 		return answer;
 	}
 	
-	//this method subtracts the two operands of the userInput
+	//subtract subtracts the two operands of the user input
 	public static int[] subtract (int[] firstOperand, int[] secondOperand){
 		int[] answer = new int[3];
-		if (firstOperand[2] == secondOperand[2]){
+		if (firstOperand[2] == secondOperand[2]){ //if denominators are the same
 			for (int i = 0; i <= 1; i++) {
-				answer[i] = firstOperand[i] - secondOperand[i];
+				answer[i] = firstOperand[i] - secondOperand[i]; //subtracts the whole and numerator parts
 			}
-			answer[2] = firstOperand[2];
+			answer[2] = firstOperand[2]; //denominator stays the same
 		}
-		else {
-			int gcf = gcf(firstOperand[2], secondOperand[2]);
-			answer[1] = (firstOperand[1] * (secondOperand[2]/gcf) - (secondOperand[1] * (firstOperand[2])/gcf));
-			answer[2] = firstOperand[2] * (secondOperand[2]/gcf);
+		else { //if denominators are different
+			int gcf = gcf(firstOperand[2], secondOperand[2]); //find greatest common factor of the denominators
+			answer[1] = (firstOperand[1] * (secondOperand[2]/gcf) - (secondOperand[1] * (firstOperand[2])/gcf)); //subtract the fractions with a common denominator
+			answer[2] = firstOperand[2] * (secondOperand[2]/gcf); //denominator is now common denominator
 		}
 		return answer;
 	}
 	
+	//multiply multiplies the two operands of the user input
 	public static int[] multiply (int[] firstOperand, int[] secondOperand){
 		int[] answer = new int[3];
-		if (firstOperand[1] * secondOperand[1] == 0){
-			for(int i = 0; i <= 1; i++){
-				answer[i] = 0;
-			}
-			answer[2] = 1;
+		if (firstOperand[1] * secondOperand[1] == 0){ //if one numerator is equal to 0
+			answer[1] = 0; //numerator is set to 0
+			answer[2] = 1; //denominator is set to 1
 		}
-		else {
+		else { //if neither numerator is 0
 			for (int j = 1; j <= 2; j++) {
-				answer[j] = firstOperand[j] * secondOperand[j];
+				answer[j] = firstOperand[j] * secondOperand[j]; //multiply the respective numerators and the denominators
 			}
 		}
 		return answer;
 	}
 	
+	//divide divides the two operands of the user input
 	public static int[] divide (int[] firstOperand, int[] secondOperand){
 		int[] answer = new int[3];
-		if (firstOperand[1] == 0){
-			for(int i = 0; i <= 1; i++){
-				answer[i] = 0;
-			}
-			answer[2] = 1;
+		if (firstOperand[1] == 0){ //if the first operand's numerator is 0
+			answer[1] = 0; //numerator is set to 0
+			answer[2] = 1; //numerator is set to 1
 		}
-		else {
+		else { //if the first operand's numerator is not 0
+			//first operand is multiplied by the reciprocal of the second operand
 			answer[1] = firstOperand[1] * secondOperand[2];
 			answer[2] = firstOperand[2] * secondOperand[1];
+			//if the denominator is negative, move the negative to the numerator
+			if (answer[2] < 0){
+				answer[2] = Math.abs(answer[2]);
+				answer[1] = -1 * answer[1];
+			}
 		}
 		return answer;
 	}
 
+	//gcf calculates the greatest common factor of two numbers
 	public static int gcf(int num1, int num2){
-		int gcf = 1;
-		if(num1 > num2){
-			for(int i = num2; i >= 1; i--){
+		//can only calculate gcf of positive numbers
+		num1 = Math.abs(num1);
+		num2 = Math.abs(num2);
+		if(num1 > num2){ //if first number is larger than second number
+			for(int i = num2; i >= 1; i--){ //for loop checks integers from smaller number to 1 if both numbers are divisible by the same integer
 				if(num1 % i == 0 && num2 % i == 0){
 					return i;
 				}
 			}
-		} else {
-			for(int j = num1; j >=1; j--){
+		} else { //if second number is larger than the first number
+			for(int j = num1; j >=1; j--){ //for loop checks integers from smaller number to 1 if both numbers are divisible by the same integer
 				if(num1 % j == 0 && num2 % j == 0){
 					return j;
 				}
 			}
 		}
-		return gcf;
+		return 1; //if both previous if statements do not pass, return 1
 	}
 	
+	//toMixedNum converts an improper fraction into a mixed number
+	public static int[] toMixedNum(int[] improperFrac){
+		if (Math.abs(improperFrac[1]) >= improperFrac[2]){ //absolute value to test whether the magnitude of the numerator is greater than the denominator
+			int[] mixedNum = new int[3];
+			mixedNum[0] = improperFrac[1] / improperFrac[2]; //integer division of numerator and denominator
+			mixedNum[1] = Math.abs(improperFrac[1] % improperFrac[2]); //absolute value to make numerator positive from when stringToInt turned it negative
+			mixedNum[2] = improperFrac[2]; //denominator stays constant
+			return mixedNum;
+		}
+		else { //if the fraction is a proper fraction, return the fraction
+			return improperFrac;
+		}
+	}
+	
+	//reduceFraction reduces the fraction into its simplest form
 	public static int[] reduceFraction(int[] fraction){
 		int gcf = gcf(fraction[1], fraction[2]);
-		if (gcf > 1){
+		if (gcf > 1){ //if fraction is not in its simplest form, divide both numerator and denominator by the gcf
 			fraction[1] = fraction[1] / gcf;
 			fraction[2] = fraction[2] / gcf;
 		}
-		fraction = toMixedNum(fraction);
-		return fraction;
+		return fraction; //returns simplest form of the fraction
 	}
 	
-	public static int[] toMixedNum(int[] improperFrac){
-		int[] mixedNum = new int[3];
-		if (Math.abs(improperFrac[1]) >= improperFrac[2]){
-			mixedNum[0] = improperFrac[1] / improperFrac[2];
-		}
-		else {
-			mixedNum[0] = improperFrac[0];
-		}
-		mixedNum[1] = Math.abs(improperFrac[1] % improperFrac[2]);
-		mixedNum[2] = improperFrac[2];
-		return mixedNum;
-	}
-	
+	//toString converts the integer array into a String
 	public static String toString(int[] mixedNum){
-		if (mixedNum[0] == 0 && mixedNum[1] != 0){
-			return (mixedNum[1] + "/" + mixedNum[2]);
+		if (mixedNum[0] == 0 && mixedNum[1] != 0){ //if the whole component is equal to 0 and the numerator is not equal to 0
+			return (mixedNum[1] + "/" + mixedNum[2]); //return the fraction in the form of a proper fraction
 		}
-		else if (mixedNum[0] == 0 && mixedNum[1] == 0){
-			return ("0");
+		else if (mixedNum[0] == 0 && mixedNum[1] == 0){ //if the whole component and the numerator are both equal to 0
+			return ("0"); //return 0
 		}
-		else if (mixedNum[0] != 0 && mixedNum[1] == 0){
-			return mixedNum[0] + "";
+		else if (mixedNum[0] != 0 && mixedNum[1] == 0){ //if the whole component is not equal to 0 and the numerator is
+			return mixedNum[0] + ""; //return the fraction in the form of an integer
 		}
-		else {
-			return (mixedNum[0] + "_" + mixedNum[1] + "/" + mixedNum[2]);
+		else { //if the whole component and the numerator are both not equal to 0
+			return (mixedNum[0] + "_" + mixedNum[1] + "/" + mixedNum[2]); //return the fraction in the form of a mixed number
 		}
 	}
-
 }
