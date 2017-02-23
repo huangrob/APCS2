@@ -1,0 +1,17 @@
+import java.io.*;
+import java.util.*;
+
+public class weather {
+	public static void main (String[] args) {
+		File weather = new File("weather.txt")
+		Scanner s = new Scanner(new File (weather));
+		double[] weather = new double [8];
+		double change = 0;
+		for (int i = 0; i < weather.length; i++){
+			weather[i] = s.nextDouble();
+			change = weather[i+1] - weather[i];
+			System.out.println(weather[i] + " to " + weather[i+1] + "; Change = " + change);
+		}
+	}
+
+}

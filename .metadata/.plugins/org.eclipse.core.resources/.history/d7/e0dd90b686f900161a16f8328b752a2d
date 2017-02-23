@@ -1,0 +1,15 @@
+import java.io.*;
+import java.util.*;
+
+public class weather {
+	public static void main (String[] args) throws FileNotFoundException {
+		Scanner s = new Scanner(new File ("./Weather2/weather.txt"));
+		double[] weather = new double [8];
+		for (int i = 0; i < weather.length; i++){
+			weather[i] = s.nextDouble();
+			double change = weather[i+1] - weather[i];
+			System.out.println(weather[i] + " to " + weather[i+1] + "; Change = " + change);
+		}
+	}
+
+}
